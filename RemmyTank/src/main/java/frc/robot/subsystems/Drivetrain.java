@@ -25,7 +25,6 @@ public class Drivetrain extends SubsystemBase {
 
   DifferentialDrive drivetrain;
 
-  CommandXboxController m_driverController;
 
   /** Creates a new Drivetrain. */
   public Drivetrain() {
@@ -45,20 +44,21 @@ public class Drivetrain extends SubsystemBase {
 
     rightWheels = new MotorControllerGroup(r1, r2);
 
+    leftWheels.setInverted(true);
+
         // sets drivetrain to differential drive
 
     drivetrain = new DifferentialDrive(leftWheels, rightWheels);
   }
 
-  public void Drive() {
+  public void Drive(CommandXboxController m_driverController) {
 
         // sets curvature drive and handles inputs
 
-  drivetrain.curvatureDrive(m_driverController.getLeftX() * 
+  drivetrain.curvatureDrive(m_driverController.getLeftY() * 
   Constants.DrivetrainConstants.kDrivetrainForwardConstant, 
-  m_driverController.getRightY() * Constants.DrivetrainConstants.kDrivetrainRotateConstant,
+  m_driverController.getRightX() * Constants.DrivetrainConstants.kDrivetrainRotateConstant,
    true);
-   
   }
 
   @Override

@@ -14,9 +14,12 @@ public class DrivetrainCommand extends CommandBase {
 
   Drivetrain drivetrain;
 
+  CommandXboxController controller;
+
   public DrivetrainCommand(Drivetrain drivetrain, CommandXboxController controller) {
 
     this.drivetrain = drivetrain;
+    this.controller = controller;
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(RobotContainer.drive);
@@ -32,7 +35,7 @@ public class DrivetrainCommand extends CommandBase {
   public void execute() {
 
         // starts up drivetrain
-        drivetrain.Drive();
+        drivetrain.Drive(controller);
 
   }
 

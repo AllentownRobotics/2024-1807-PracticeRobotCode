@@ -27,8 +27,8 @@ public final class Constants {
 
     public static final int kDrivetrainMotorR2 = 4;
 
-    public static final double kDrivetrainForwardConstant = .3;
+    public static final double kDrivetrainForwardConstant = .2;
 
-    public static final double kDrivetrainRotateConstant = .5;
+    public static final double kDrivetrainRotateConstant = .3;
   }
 }

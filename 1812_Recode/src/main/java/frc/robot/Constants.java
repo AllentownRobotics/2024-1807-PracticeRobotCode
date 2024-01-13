@@ -19,22 +19,4 @@ public final class Constants {
     public static final int kOperatorControllerPort = 1;
 
   }
-  public static class ArmConstants {
-
-    public static final int kArmToggleCommandIndex = 0;
-    public static final int kArmForwardCommandIndex = 1;
-    public static final int kArmReverseCommandIndex = 2;
-
-  }
-  public static final class ClawConstants {
-
-    public static final int kClawToggleCommandIndex = 0;
-    public static final int kClawCloseCommandIndex = 1;
-    public static final int kClawOpenCommandIndex = 2;
-
-    public static final int kWristToggleCommandIndex = 3;
-    public static final int kWristDownCommandIndex = 4;
-    public static final int kWristUpCommandIndex = 5;
-    
-  }
 }

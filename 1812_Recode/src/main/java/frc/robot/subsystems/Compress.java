@@ -12,13 +12,18 @@ public class Compress extends SubsystemBase {
   Compressor compressor;
   /** Creates a new Compress. */
   public Compress() {
+
     compressor = new Compressor(PneumaticsModuleType.CTREPCM);
 
-    compressor.enableAnalog(100, 120);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+  }
+  public void run() {
+
+    compressor.enableAnalog(100, 120);
+    
   }
 }

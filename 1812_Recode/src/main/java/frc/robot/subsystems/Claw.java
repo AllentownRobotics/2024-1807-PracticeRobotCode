@@ -17,7 +17,6 @@ public class Claw extends SubsystemBase {
   /** Creates a new Claw. */
   public Claw() {
     claw = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 0);
-    wrist = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 0);
   }
 
   @Override
@@ -25,27 +24,12 @@ public class Claw extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
-  public void ToggleClaw() {
+  public void toggleClaw() {
     claw.toggle();
+    claw.get();
   }
 
-  public void CloseClaw() {
-    claw.set(Value.kForward);
-  }
-
-  public void OpenClaw() {
-    claw.set(Value.kReverse);
-  }
-
-  public void ToggleWrist() {
-    wrist.toggle();
-  }
-
-  public void WristUp() {
-    wrist.set(Value.kForward);
-  }
-  
-  public void WristDown() {
-    wrist.set(Value.kReverse);
+  public void setClaw(Value value) {
+    claw.set(value);
   }
 }

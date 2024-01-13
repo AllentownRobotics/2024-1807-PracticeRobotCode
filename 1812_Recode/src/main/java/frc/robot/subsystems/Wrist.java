@@ -9,15 +9,13 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class Arm extends SubsystemBase {
+public class Wrist extends SubsystemBase {
 
-  DoubleSolenoid arm;
+  DoubleSolenoid wrist;
 
-  /** Creates a new Arm. */
-  public Arm() {
-
-    arm = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 0);
-
+  /** Creates a new Wrist. */
+  public Wrist() {
+    wrist = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 0);
   }
 
   @Override
@@ -25,12 +23,12 @@ public class Arm extends SubsystemBase {
     // This method will be called once per scheduler run
   }
   
-  public void toggleArm() {
-    arm.toggle();
-    arm.get();
+  public void toggleWrist() {
+    wrist.toggle();
+    wrist.get();
   }
 
-  public void setArm(Value value) {
-    arm.set(value);
+  public void setWrist(Value value) {
+    wrist.set(value);
   }
 }

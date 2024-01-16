@@ -13,7 +13,7 @@ import frc.robot.Constants.GlobalConstants;
 public class Compress extends SubsystemBase {
   Compressor comp;
   public Compress() {
-    comp = new Compressor(GlobalConstants.PNEUMATICS_ID, PneumaticsModuleType.CTREPCM);
+    comp = new Compressor(GlobalConstants.pneumaticsID, PneumaticsModuleType.CTREPCM);
   }
 
   @Override

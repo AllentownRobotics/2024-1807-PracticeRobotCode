@@ -53,7 +53,7 @@ public SwerveModule(int driveID, int turningID, double chassisAngularOffset) {
   turningEncoder.setPositionConversionFactor(ModuleConstants.TURN_ENCODER_POS_FACTOR);
   turningEncoder.setVelocityConversionFactor(ModuleConstants.TURN_ENCODER_VELOCITY_FACTOR);
 
-  turningEncoder.setInverted(ModuleConstants.TURN_ENCODER_INVERTED);
+  turningEncoder.setInverted(ModuleConstants.invertTurnEncoder);
 
   turningPIDController.setPositionPIDWrappingEnabled(true);
   turningPIDController.setPositionPIDWrappingMaxInput(ModuleConstants.TURN_ENCODER_POS_MAX_INPUT);
@@ -120,21 +120,6 @@ public void setDesiredState(SwerveModuleState swerveModuleStates){
   turningPIDController.setReference(optimizedDesiredState.angle.getRadians(), CANSparkMax.ControlType.kPosition);
 
   desiredState = optimizedDesiredState;
-}
-public void setDesiredStateNoOpt(SwerveModuleState desiredState) {
-
-  SwerveModuleState correctedDesiredState = new SwerveModuleState();
-  correctedDesiredState.speedMetersPerSecond = desiredState.speedMetersPerSecond;
-  correctedDesiredState.angle = desiredState.angle.plus(Rotation2d.fromRadians(chassisAngularOffset));
-
-  
-
-
-  // Command driving and turning SPARKS MAX towards their respective setpoints.
-  drivePIDController.setReference(correctedDesiredState.speedMetersPerSecond, CANSparkMax.ControlType.kVelocity);
-  turningPIDController.setReference(correctedDesiredState.angle.getRadians(), CANSparkMax.ControlType.kPosition);
-
-  correctedDesiredState = desiredState;
 }
 
 //zeros all swerve modules encoders 

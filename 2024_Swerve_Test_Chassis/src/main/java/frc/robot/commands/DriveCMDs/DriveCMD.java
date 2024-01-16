@@ -10,19 +10,20 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.DriveTrain;
 
 public class DriveCMD extends Command {
- 
-  private boolean fieldOriented;
-    
+
   private DriveTrain drive;
-
+  
   private CommandXboxController drivecontroller;
-
-  public DriveCMD(CommandXboxController controller, boolean fieldOriented, DriveTrain drive) {
+  
+  private boolean fieldOriented;
+  private boolean rateLimited;
+  public DriveCMD(DriveTrain drive, CommandXboxController controller, boolean fieldOriented, boolean rateLimted) {
       this.drive = drive;
-      addRequirements(drive);
+      this. rateLimited = rateLimted;
 
       this.fieldOriented = fieldOriented;
       this.drivecontroller = controller;
+      addRequirements(drive);
   }
 
   @Override
@@ -31,6 +32,6 @@ public class DriveCMD extends Command {
           MathUtil.applyDeadband(drivecontroller.getLeftY(), 0.3),
           MathUtil.applyDeadband(drivecontroller.getLeftX(), 0.3),
           MathUtil.applyDeadband(-drivecontroller.getRightX(), 0.3),
-          fieldOriented);
+          fieldOriented, rateLimited);
   }
 }

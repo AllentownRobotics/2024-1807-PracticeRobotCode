@@ -30,14 +30,14 @@ public class RobotContainer {
   
   // Controllers
   private CommandXboxController driverController =
-      new CommandXboxController(OIConstants.DRIVER_CONTROLLER);
+      new CommandXboxController(OIConstants.driverControllerPort);
   private CommandXboxController operatorController =
-      new CommandXboxController(OIConstants.OPERATOR_CONTROLLER);
+      new CommandXboxController(OIConstants.operatorControllerPort);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     //default commands
-    driveTrain.setDefaultCommand(new DriveCMD(driverController, true, driveTrain));
+    driveTrain.setDefaultCommand(new DriveCMD(driveTrain, driverController, true, true));
     compressor.setDefaultCommand(new CompressCMD(compressor));
     // Configure the trigger bindings
     configureBindings();
@@ -55,7 +55,7 @@ public class RobotContainer {
   private void configureBindings() {
     //drive controller configs
     driverController.rightBumper().whileTrue(new RunCommand(() -> driveTrain.setX(), driveTrain));
-    driverController.leftBumper().whileTrue(new SlowDriveCMD(driverController, true, driveTrain));
+    driverController.leftBumper().whileTrue(new SlowDriveCMD(driveTrain, driverController, true, true));
     driverController.start().onTrue(new InstantCommand(() -> driveTrain.zeroHeading(), driveTrain));
 
     //operator controller configs

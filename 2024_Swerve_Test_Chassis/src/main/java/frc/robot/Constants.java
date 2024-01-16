@@ -71,6 +71,7 @@ public final class Constants {
   
   public static final boolean reverseGyro = false;
   
+  //slew stuff constants
   public static final double directionSlewRate = 1.2; // radians per second
   public static final double magnitudeSlewRate = 1.8; // percent per second (1 = 100%)
   public static final double rotationalSlewRate = 2.0; // percent per second (1 = 100%)
@@ -129,11 +130,12 @@ public final class Constants {
   
   //Auto Constnts 
   public static class AutoConstants{
-      
-     public static final double AUTO_MAX_SPEED_MPS = 2;
+      public static final double AUTO_MAX_SPEED_MPS = 2;
       public static final double AUTO_MAX_ACCELERATION_MPS_SQUARED = 2;
       public static final double MAX_ANGULAR_SPEED_RPS = Math.PI;
       public static final double MAX_ANGULAR_SPEED_RPS_SQUARED = Math.PI;
+
+      public static final double driveTrainRadius = 0.46697331829686; //in meters
    
       public static final double PX_CONTROLLER = 1;
       public static final double PY_CONTROLLER = 1;

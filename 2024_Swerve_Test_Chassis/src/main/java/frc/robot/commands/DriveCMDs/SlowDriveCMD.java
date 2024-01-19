@@ -30,9 +30,9 @@ public class SlowDriveCMD extends Command {
   @Override
   public void execute() {
       drive.drive(
-          MathUtil.applyDeadband(drivecontroller.getLeftY(), 0.3)/DriveConstants.slowDriveScalingConstant,
-          MathUtil.applyDeadband(drivecontroller.getLeftX(), 0.3)/DriveConstants.slowDriveScalingConstant,
-          MathUtil.applyDeadband(-drivecontroller.getRightX(), 0.3),
+          MathUtil.applyDeadband(drivecontroller.getLeftY(), 0.3)*DriveConstants.slowDriveScalingConstant,
+          MathUtil.applyDeadband(drivecontroller.getLeftX(), 0.3)*DriveConstants.slowDriveScalingConstant,
+          MathUtil.applyDeadband(-drivecontroller.getRightX(), 0.3)*DriveConstants.slowDriveScalingConstant,
           fieldOriented, rateLimited);
   }
 }

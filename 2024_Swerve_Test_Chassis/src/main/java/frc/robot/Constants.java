@@ -36,7 +36,7 @@ public final class Constants {
   public static final class DriveConstants{
   
   //Drive parameters 
-  public static final double maxSpeedMPS = 4.7;
+  public static final double maxSpeedMPS = 4.8;
   public static final double maxAngularSpeed = 2 * Math.PI; //Radians per sec
   public static final double slowDriveScalingConstant = .5; //Constant drive speed is multiplied by during slow drive
   
@@ -72,9 +72,9 @@ public final class Constants {
   public static final boolean reverseGyro = false;
   
   //slew stuff constants
-  public static final double directionSlewRate = 1.2; // radians per second
-  public static final double magnitudeSlewRate = 1.8; // percent per second (1 = 100%)
-  public static final double rotationalSlewRate = 2.0; // percent per second (1 = 100%)
+  public static final double directionSlewRate = 10; // radians per second
+  public static final double magnitudeSlewRate = 2; // percent per second (1 = 100%)
+  public static final double rotationalSlewRate = 4; // percent per second (1 = 100%)
   }
   
   public static final class NeoMotorConstants {
@@ -130,7 +130,7 @@ public final class Constants {
   
   //Auto Constnts 
   public static class AutoConstants{
-      public static final double AUTO_MAX_SPEED_MPS = 2;
+      public static final double AUTO_MAX_SPEED_MPS = 3;
       public static final double AUTO_MAX_ACCELERATION_MPS_SQUARED = 2;
       public static final double MAX_ANGULAR_SPEED_RPS = Math.PI;
       public static final double MAX_ANGULAR_SPEED_RPS_SQUARED = Math.PI;

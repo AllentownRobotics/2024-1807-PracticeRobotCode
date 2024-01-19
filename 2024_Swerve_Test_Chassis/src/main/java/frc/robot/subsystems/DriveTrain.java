@@ -81,6 +81,7 @@ public class DriveTrain extends SubsystemBase {
   // constructor
   public DriveTrain() {
     // config autobuilder
+    // https://3015rangerrobotics.github.io/pathplannerlib/PathplannerLib.json
     AutoBuilder.configureHolonomic(
         this::getPose, // Robot pose supplier
         this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
@@ -284,6 +285,10 @@ public class DriveTrain extends SubsystemBase {
             ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered, gyro.getRotation2d())
             : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered));
     setModuleStates(swerveModuleStates);
+
+    
+    SmartDashboard.putNumber("front right desired", xSpeed*DriveConstants.maxSpeedMPS);
+    SmartDashboard.putNumber("front right actual", frontRightModule.getWheelVelocity());
   }
 
   /**

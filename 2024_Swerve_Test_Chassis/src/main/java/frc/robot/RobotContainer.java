@@ -8,8 +8,10 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.commands.CompressCMD;
 import frc.robot.commands.DriveCMDs.DriveCMD;
 import frc.robot.commands.DriveCMDs.SlowDriveCMD;
+import frc.robot.commands.DriveCMDs.TurnCMD;
 import frc.robot.subsystems.Compress;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Limelight;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 
@@ -34,6 +36,7 @@ public class RobotContainer {
   // The robot's subsystems
   public DriveTrain driveTrain;
   private Compress compressor;
+  private Limelight limelight;
 
   // Controllers
   private CommandXboxController driverController = new CommandXboxController(OIConstants.driverControllerPort);
@@ -47,9 +50,10 @@ public class RobotContainer {
     // Subsystem Initialization
     driveTrain = new DriveTrain();
     compressor = new Compress();
+    limelight = new Limelight();
 
     // config default commands
-    driveTrain.setDefaultCommand(new DriveCMD(driveTrain, driverController, true, true));
+    driveTrain.setDefaultCommand(new DriveCMD(driveTrain, driverController, true, false));
     compressor.setDefaultCommand(new CompressCMD(compressor));
 
     // Config for Auto Chooser
@@ -77,8 +81,9 @@ public class RobotContainer {
   private void configureBindings() {
     // drive controller configs
     driverController.rightBumper().whileTrue(new RunCommand(() -> driveTrain.setX(), driveTrain));
-    driverController.leftBumper().whileTrue(new SlowDriveCMD(driveTrain, driverController, true, true));
+    driverController.leftBumper().whileTrue(new SlowDriveCMD(driveTrain, driverController, true, false));
     driverController.start().onTrue(new InstantCommand(() -> driveTrain.zeroHeading(), driveTrain));
+    driverController.a().whileTrue(new TurnCMD(driveTrain, limelight));
 
     // operator controller configs
   }

@@ -6,23 +6,28 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.PathPlannerLogging;
 import com.pathplanner.lib.util.ReplanningConfig;
 
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
@@ -54,7 +59,7 @@ public class DriveTrain extends SubsystemBase {
   // The gyro sensor
   private final Pigeon2 gyro = new Pigeon2(GlobalConstants.pigeonID);
 
-//Slew stuff
+  // Slew stuff
   private SlewRateLimiter m_magLimiter = new SlewRateLimiter(DriveConstants.magnitudeSlewRate);
   private SlewRateLimiter m_rotLimiter = new SlewRateLimiter(DriveConstants.rotationalSlewRate);
   private double m_prevTime = WPIUtilJNI.now() * 1e-6;
@@ -62,19 +67,23 @@ public class DriveTrain extends SubsystemBase {
   private double m_currentTranslationDir = 0.0;
   private double m_currentTranslationMag = 0.0;
 
-  //config swervekinematics constant used too work with chassis speeds
-  private SwerveDriveKinematics swerveKinematics = DriveConstants.swerveKinematics; 
+  // config swervekinematics constant used too work with chassis speeds
+  private SwerveDriveKinematics swerveKinematics = DriveConstants.swerveKinematics;
 
   // Odometry class for tracking robot pose
-  SwerveDriveOdometry odometry = new SwerveDriveOdometry(
-      swerveKinematics,
-      gyro.getRotation2d(),
+  
+
+  SwerveDrivePoseEstimator odometry2 = new SwerveDrivePoseEstimator(
+    swerveKinematics, 
+    gyro.getRotation2d(),
       new SwerveModulePosition[] {
           frontLeftModule.getPosition(),
           frontRightModule.getPosition(),
           rearLeftModule.getPosition(),
-          rearRightModule.getPosition()
-      });
+          rearRightModule.getPosition() },
+    new Pose2d(),
+    VecBuilder.fill(0.1, 0.1, 0.1),
+    VecBuilder.fill(0.9, 0.9, 0.9));
 
   private Field2d field = new Field2d();
 
@@ -117,16 +126,14 @@ public class DriveTrain extends SubsystemBase {
   @Override
   public void periodic() {
     // Update the odometry in the periodic block
-    odometry.update(
-        gyro.getRotation2d(),
-        new SwerveModulePosition[] {
-            frontLeftModule.getPosition(),
-            frontRightModule.getPosition(),
-            rearLeftModule.getPosition(),
-            rearRightModule.getPosition()
-        });
+    
+
+    updateEstimatedOdometry();
     // updates field
     field.setRobotPose(getPose());
+
+    SmartDashboard.putNumber("Desired Velocity", frontLeftModule.getDesiredVelocity());
+    SmartDashboard.putNumber("Actual Velocity", frontLeftModule.getWheelVelocity());
   }
 
   // general getter/setter methods BELOW
@@ -136,12 +143,16 @@ public class DriveTrain extends SubsystemBase {
    *
    * @param pose The pose to which to set the odometry.
    */
-  public void resetOdometry(Pose2d pose) {
-    odometry.resetPosition(
-        gyro.getRotation2d(),
-        getPositions(),
-        pose);
-  }
+  
+  
+  
+  public void resetEstimatedOdometry(Pose2d pose) {
+    odometry2.resetPosition(gyro.getRotation2d(), getPositions(), pose);
+}
+
+public void updateEstimatedOdometry() {
+    odometry2.updateWithTime(Timer.getFPGATimestamp(), gyro.getRotation2d(), getPositions());
+}
 
   /**
    * Returns the currently-estimated pose of the robot.
@@ -149,7 +160,7 @@ public class DriveTrain extends SubsystemBase {
    * @return The pose.
    */
   public Pose2d getPose() {
-    return odometry.getPoseMeters();
+    return odometry2.getEstimatedPosition();
   }
 
   /**
@@ -158,7 +169,7 @@ public class DriveTrain extends SubsystemBase {
    * @param desiredStates The curent robot pose.
    */
   public void resetPose(Pose2d pose) {
-    odometry.resetPosition(gyro.getRotation2d(), getPositions(), pose);
+    odometry2.resetPosition(gyro.getRotation2d(), getPositions(), pose);
   }
 
   /**
@@ -282,12 +293,12 @@ public class DriveTrain extends SubsystemBase {
 
     var swerveModuleStates = swerveKinematics.toSwerveModuleStates(
         fieldRelative
-            ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered, gyro.getRotation2d())
+            ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered,
+                gyro.getRotation2d())
             : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered));
     setModuleStates(swerveModuleStates);
 
-    
-    SmartDashboard.putNumber("front right desired", xSpeed*DriveConstants.maxSpeedMPS);
+    SmartDashboard.putNumber("front right desired", xSpeed * DriveConstants.maxSpeedMPS);
     SmartDashboard.putNumber("front right actual", frontRightModule.getWheelVelocity());
   }
 
@@ -330,5 +341,22 @@ public class DriveTrain extends SubsystemBase {
    */
   public double getTurnRate() {
     return gyro.getRate() * (DriveConstants.reverseGyro ? -1.0 : 1.0);
+  }
+
+  public Command generateAndFollowPath(String pathName) {// Load the path we want to pathfind to and follow
+    PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
+
+    // Create the constraints to use while pathfinding. The constraints defined in
+    // the path will only be used for the path.
+    PathConstraints constraints = new PathConstraints(
+        3.0, 3.0, 2 * Math.PI, 4 * Math.PI);
+
+    // Since AutoBuilder is configured, we can use it to build pathfinding commands
+    Command pathfindingCommand = AutoBuilder.pathfindThenFollowPath(
+        path,
+        constraints,
+        3.0); // Rotation delay distance in meters. This is how far the robot should travel
+              // before attempting to rotate.
+    return pathfindingCommand;
   }
 }

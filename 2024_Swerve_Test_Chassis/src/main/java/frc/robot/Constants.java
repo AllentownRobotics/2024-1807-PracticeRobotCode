@@ -8,7 +8,6 @@ import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 
 /**
@@ -89,7 +88,7 @@ public final class Constants {
   
     //Calculations for drive motor conversion factors and feed forwards
       public static final double DRIVE_MOTOR_FREE_SPEED_RPS = NeoMotorConstants.NEOFreeSpeed / 60;
-      public static final double WHEEL_DIAMETER_METERS = Units.inchesToMeters(2.85);
+      public static final double WHEEL_DIAMETER_METERS = Units.inchesToMeters(3);
       public static final double WHEEL_CIRCUMFRENCE_METERS = WHEEL_DIAMETER_METERS * Math.PI;
       public static final double DRIVE_MOTOR_REDUCTION = (45.0 * 22) / (driveMotorTeeth * 15);
       public static final double DRIVE_WHEEL_FREE_SPEED_RPS = (DRIVE_MOTOR_FREE_SPEED_RPS * WHEEL_CIRCUMFRENCE_METERS) / DRIVE_MOTOR_REDUCTION;
@@ -106,15 +105,15 @@ public final class Constants {
       public static final double TURN_ENCODER_POS_MAX_INPUT = TURN_ENCODER_POS_FACTOR; // radians
   
       //drive motor PID
-      public static final double DRIVE_P = 0.06;
-      public static final double DRIVE_I = 0.0001;
+      public static final double DRIVE_P = 0.04;
+      public static final double DRIVE_I = 0.0;
       public static final double DRIVE_D = 0;
       public static final double DRIVE_FF = 1 / DRIVE_WHEEL_FREE_SPEED_RPS;
       public static final double DRIVE_MIN_OUTPUT = -1;
       public static final double DRIVE_MAX_OUTPUT = 1;
   
       //turn motor PID
-      public static final double TURN_P = 1;
+      public static final double TURN_P = .5;
       public static final double TURN_I = 0;
       public static final double TURN_D = 0;
       public static final double TURN_FF = 0;
@@ -127,21 +126,15 @@ public final class Constants {
       public static final int DRIVE_MOTOR_CURRENT_LIMIT = 50; // amps
       public static final int TURN_MOTOR_CURRENT_LIMIT = 20; // amps
   }
-  
+
   //Auto Constnts 
   public static class AutoConstants{
       public static final double AUTO_MAX_SPEED_MPS = 3;
-      public static final double AUTO_MAX_ACCELERATION_MPS_SQUARED = 2;
-      public static final double MAX_ANGULAR_SPEED_RPS = Math.PI;
-      public static final double MAX_ANGULAR_SPEED_RPS_SQUARED = Math.PI;
 
       public static final double driveTrainRadius = 0.46697331829686; //in meters
    
       public static final double PX_CONTROLLER = 1;
-      public static final double PY_CONTROLLER = 1;
-      public static final double P_THETA_CONTROLLER = 1; 
-      // Constraint for the motion profiled robot angle controller
-      public static final TrapezoidProfile.Constraints THETA_CONTROLLER_CONSTRAINTS = new TrapezoidProfile.Constraints(
-        MAX_ANGULAR_SPEED_RPS, MAX_ANGULAR_SPEED_RPS_SQUARED);        
+      public static final double PY_CONTROLLER = 5;
+      public static final double P_THETA_CONTROLLER = .5;   
   }
 }

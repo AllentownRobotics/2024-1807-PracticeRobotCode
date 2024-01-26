@@ -84,6 +84,7 @@ public class RobotContainer {
     driverController.leftBumper().whileTrue(new SlowDriveCMD(driveTrain, driverController, true, false));
     driverController.start().onTrue(new InstantCommand(() -> driveTrain.zeroHeading(), driveTrain));
     driverController.a().whileTrue(new TurnCMD(driveTrain, limelight));
+    driverController.povUp().whileTrue(driveTrain.generateAndFollowPath("Amp Lineup"));
 
     // operator controller configs
   }

@@ -4,6 +4,10 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.Rev2mDistanceSensor;
+import com.revrobotics.Rev2mDistanceSensor.Port;
+import com.revrobotics.Rev2mDistanceSensor.Unit;
+
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
@@ -12,13 +16,14 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Claw extends SubsystemBase {
 
   DoubleSolenoid claw;
-  DoubleSolenoid wrist;
+  public Rev2mDistanceSensor distance;
   
   /** Creates a new Claw. */
   public Claw() {
 
     claw = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 0);
-
+    distance = new Rev2mDistanceSensor(Port.kMXP);
+    distance.setDistanceUnits(Unit.kInches);
   }
 
   @Override
@@ -28,7 +33,7 @@ public class Claw extends SubsystemBase {
 
   public void toggleClaw() {
 
-    if (claw.get() == Value.kForward) {
+    if (claw.get().equals(Value.kForward)) {
 
       claw.set(Value.kReverse);
 

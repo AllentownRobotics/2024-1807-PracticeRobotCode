@@ -4,13 +4,11 @@
 
 package frc.robot.commands.CommandGroups;
 
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.Constants.WristConstants;
-import frc.robot.commands.ArmCommands.ArmSetCommand;
-import frc.robot.commands.ClawCommands.ClawSetCommand;
-import frc.robot.commands.WristCommands.WristToSetpoint;
+import frc.robot.commands.ArmCommands.ArmDown;
+import frc.robot.commands.ClawCommands.ClawClosed;
+import frc.robot.commands.WristCommands.WristDefault;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Claw;
 import frc.robot.subsystems.Wrist;
@@ -26,12 +24,12 @@ public class Reset extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-    new ClawSetCommand(claw, Value.kForward), 
+    new ClawClosed(claw), 
 
     new ParallelCommandGroup
-    (new WristToSetpoint(wrist, WristConstants.wristRestSetpoint), 
+    (new WristDefault(wrist), 
 
-    new ArmSetCommand(arm, Value.kReverse))
+    new ArmDown(arm))
     
     );
   }

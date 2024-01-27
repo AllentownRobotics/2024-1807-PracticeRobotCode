@@ -4,12 +4,10 @@
 
 package frc.robot.commands.CommandGroups;
 
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.Constants.WristConstants;
-import frc.robot.commands.ArmCommands.ArmSetCommand;
-import frc.robot.commands.ClawCommands.ClawSetCommand;
-import frc.robot.commands.WristCommands.WristToSetpoint;
+import frc.robot.commands.ArmCommands.ArmDown;
+import frc.robot.commands.ClawCommands.ClawOpen;
+import frc.robot.commands.WristCommands.WristLow;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Claw;
 import frc.robot.subsystems.Wrist;
@@ -25,10 +23,10 @@ public class PlaceLow extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-    new ArmSetCommand(arm, Value.kReverse),
+    new ArmDown(arm),
 
-    new WristToSetpoint(wrist, WristConstants.wristLowSetpoint),
+    new WristLow(wrist),
     
-    new ClawSetCommand(claw, Value.kReverse));
+    new ClawOpen(claw));
   }
 }

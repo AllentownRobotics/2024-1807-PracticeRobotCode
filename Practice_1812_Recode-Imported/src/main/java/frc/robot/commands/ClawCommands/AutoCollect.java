@@ -2,23 +2,22 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.WristCommands;
+package frc.robot.commands.ClawCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Wrist;
+import frc.robot.subsystems.Claw;
 
-public class WristToSetpoint extends Command {
+public class AutoCollect extends Command {
 
-  double desiredAngle;
-  Wrist wrist;
-  
-  /** Creates a new WristToSetpoint. */
-  public WristToSetpoint(Wrist wrist, double desiredAngle) {
+  Claw claw;
 
-    this.wrist = wrist;
-    this.desiredAngle = desiredAngle;
+  /** Creates a new CloseIfInRange. */
+  public AutoCollect(Claw claw) {
+
+    this.claw = claw;
+
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(wrist);
+    addRequirements(claw);
   }
 
   // Called when the command is initially scheduled.
@@ -27,17 +26,24 @@ public class WristToSetpoint extends Command {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    wrist.moveToSetpoint(desiredAngle);
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    new ClawClosed(claw);
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    if (claw.distance.getRange() < 4) {
+
+      return true;
+
+    } else {
+
+      return false;
+    }
   }
 }

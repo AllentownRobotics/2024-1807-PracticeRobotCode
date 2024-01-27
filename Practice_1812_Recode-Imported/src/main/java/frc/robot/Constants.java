@@ -16,16 +16,23 @@ public final class Constants {
   public static class OperatorConstants {
 
     public static final int kDriverControllerPort = 0;
+
     public static final int kOperatorControllerPort = 1;
 
   }
   public static class WristConstants {
-    public static final double wristRestSetpoint = 0;
+    public static final double wristRestSetpointDegrees = 0;
 
-    public static final double wristHighSetpoint = 60;
+    public static final double wristHighSetpointDegrees = 60;
     
-    public static final double wristMidSetpoint = 90;
+    public static final double wristMidSetpointDegrees = 90;
 
-    public static final double wristLowSetpoint = 110;
+    public static final double wristLowSetpointDegrees = 110;
+
+    public static final double wristP = .0005;
+
+    public static final double wristI = 0;
+
+    public static final double wristD = .005;
   }
 }

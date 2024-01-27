@@ -8,16 +8,16 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.CompressCommand;
 import frc.robot.commands.ArmCommands.ArmToggleCommand;
 import frc.robot.commands.ClawCommands.ClawToggleCommand;
-import frc.robot.commands.CommandGroups.AutoCollect;
+import frc.robot.commands.ClawCommands.AutoCollect;
 import frc.robot.commands.CommandGroups.PlaceHigh;
 import frc.robot.commands.CommandGroups.PlaceLow;
 import frc.robot.commands.CommandGroups.PlaceMid;
 import frc.robot.commands.CommandGroups.Reset;
+import frc.robot.commands.WristCommands.WristDefault;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Claw;
 import frc.robot.subsystems.Compress;
 import frc.robot.subsystems.Wrist;
-import edu.wpi.first.wpilibj.Ultrasonic;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -30,7 +30,6 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
 
-  Ultrasonic distance = new Ultrasonic(0, 1);
 
   // The robot's subsystems and commands are defined here...
   public final static Arm arm = new Arm();
@@ -70,9 +69,11 @@ public class RobotContainer {
 
     m_operatorController.x().onTrue(new ClawToggleCommand(claw));
 
+    m_operatorController.b().onTrue(new WristDefault(wrist));
+
     m_operatorController.rightBumper().onTrue(new Reset(claw, arm, wrist));
 
-    m_operatorController.leftBumper().onTrue(new AutoCollect(arm, claw, wrist, distance));
+    m_operatorController.leftBumper().whileTrue(new AutoCollect(claw));
 
     m_operatorController.povDown().onTrue(new PlaceLow(arm, claw, wrist));
 

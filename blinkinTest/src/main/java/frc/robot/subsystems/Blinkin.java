@@ -5,17 +5,20 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Blinkin extends SubsystemBase {
-  Spark blinkin;
+  public Spark blinkin;
   /** Creates a new Blinkin. */
   public Blinkin() {
-    blinkin = new Spark(0);
+    blinkin = new Spark(1);
   }
 
   public void setColor(double color) {
-    blinkin.setVoltage(color);
+    blinkin.set(color);
+
+    SmartDashboard.putNumber("blinkin on", blinkin.get());
   }
 
   @Override

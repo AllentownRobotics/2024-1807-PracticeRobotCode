@@ -83,12 +83,12 @@ public final class Constants {
   }
 
   public static final class NeoMotorConstants {
-    public static final double NEOFreeSpeed = 6784;
+    public static final double NEOFreeSpeed = 6000;
   }
 
   public static final class ModuleConstants {
     /* pinion gear teeth */
-    public static final int driveMotorTeeth = 14;
+    public static final int driveMotorTeeth = 13;
 
     public static final boolean invertTurnEncoder = true;
 
@@ -115,7 +115,7 @@ public final class Constants {
     public static final double DRIVE_P = 0.04;
     public static final double DRIVE_I = 0.001;
     public static final double DRIVE_D = 0;
-    public static final double DRIVE_FF = 1 / DRIVE_WHEEL_FREE_SPEED_RPS; // 1/6.31562329844;
+    public static final double DRIVE_FF = 1 / DRIVE_WHEEL_FREE_SPEED_RPS; //
     public static final double DRIVE_MIN_OUTPUT = -1;
     public static final double DRIVE_MAX_OUTPUT = 1;
 

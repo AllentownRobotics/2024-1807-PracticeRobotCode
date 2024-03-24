@@ -118,6 +118,7 @@ public class DriveTrain extends SubsystemBase {
     SmartDashboard.putNumber("Heading", getHeading());
     SmartDashboard.putNumber("wheel speed", frontLeftModule.getWheelVelocity());
     SmartDashboard.putNumber("wheel rotations", frontLeftModule.getRotations());
+    SmartDashboard.putNumber("desired wheel speed", frontLeftModule.getDesiredVelocity());
     SmartDashboard.putNumber("get pose heading", getPose().getRotation().getDegrees());
   }
 

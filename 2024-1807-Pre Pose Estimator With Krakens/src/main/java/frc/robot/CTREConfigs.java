@@ -8,7 +8,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import frc.robot.Constants.ModuleConstants;
 
 public final class CTREConfigs {
-    public static TalonFXConfiguration swerveDriveFXConfig = new TalonFXConfiguration();
+    public static  TalonFXConfiguration swerveDriveFXConfig = new TalonFXConfiguration();
 
     public CTREConfigs(){
         /** Swerve Drive Motor Configuration */
@@ -26,9 +26,9 @@ public final class CTREConfigs {
         swerveDriveFXConfig.CurrentLimits.SupplyTimeThreshold = .1;
 
         /* PID Config */
-        swerveDriveFXConfig.Slot0.kP = ModuleConstants.DRIVE_P;
-        swerveDriveFXConfig.Slot0.kI = ModuleConstants.DRIVE_I;
-        swerveDriveFXConfig.Slot0.kD = ModuleConstants.DRIVE_D;
+        swerveDriveFXConfig.Slot0.kP = 0.5;
+        swerveDriveFXConfig.Slot0.kI = 0.0;
+        swerveDriveFXConfig.Slot0.kD = 0.1;
 
         /* Open and Closed Loop Ramping */
         swerveDriveFXConfig.OpenLoopRamps.VoltageOpenLoopRampPeriod = ModuleConstants.OPEN_LOOP_RAMP_RATE;

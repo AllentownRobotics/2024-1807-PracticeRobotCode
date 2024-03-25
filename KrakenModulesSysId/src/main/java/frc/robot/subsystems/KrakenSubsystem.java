@@ -19,6 +19,7 @@ import com.revrobotics.SparkAbsoluteEncoder.Type;
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkPIDController;
+import com.revrobotics.CANSparkBase.ControlType;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.units.Distance;
@@ -31,6 +32,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.Constants.ModuleConstants;
 
 
 public class KrakenSubsystem extends SubsystemBase {
@@ -43,6 +45,16 @@ public class KrakenSubsystem extends SubsystemBase {
   CANSparkMax frontRightTurn;
   CANSparkMax backRightTurn;
   CANSparkMax backLeftTurn;
+
+  AbsoluteEncoder frontLeftEncoder;
+  AbsoluteEncoder frontRightEncoder;
+  AbsoluteEncoder backLeftEncoder;
+  AbsoluteEncoder backRightEncoder;
+
+  SparkPIDController frontLeftPIDController;
+  SparkPIDController frontRightPIDController;
+  SparkPIDController backLeftPIDController;
+  SparkPIDController backRightPIDController;
   
   double constantVoltage = 0.0;
 
@@ -72,7 +84,7 @@ public class KrakenSubsystem extends SubsystemBase {
     backRightTurn = new CANSparkMax(6, MotorType.kBrushless);
     backLeftTurn = new CANSparkMax(8, MotorType.kBrushless);
     TalonFXConfiguration config = new TalonFXConfiguration();
-    config.Feedback.SensorToMechanismRatio = 5.08/(0.076*3.14);
+    config.Feedback.SensorToMechanismRatio = 5.08/(0.076*Math.PI);
     config.Slot0.kP = 0.05;
     config.Slot0.kI = 0.0;
     config.Slot0.kD = 0.0;
@@ -81,6 +93,97 @@ public class KrakenSubsystem extends SubsystemBase {
     frontLeftKraken.getConfigurator().apply(config);
     frontRightKraken.getConfigurator().apply(config);
     backRightKraken.getConfigurator().apply(config);
+
+  
+  frontLeftTurn.restoreFactoryDefaults();
+  frontRightTurn.restoreFactoryDefaults();
+  backLeftTurn.restoreFactoryDefaults();
+  backRightTurn.restoreFactoryDefaults(); 
+
+  frontLeftEncoder = frontLeftTurn.getAbsoluteEncoder(Type.kDutyCycle);
+  frontRightEncoder = frontRightTurn.getAbsoluteEncoder(Type.kDutyCycle);
+  backLeftEncoder = backRightTurn.getAbsoluteEncoder(Type.kDutyCycle);
+  backRightEncoder = backLeftTurn.getAbsoluteEncoder(Type.kDutyCycle);
+
+
+  frontLeftPIDController = frontLeftTurn.getPIDController();
+  frontRightPIDController = frontRightTurn.getPIDController();
+  backLeftPIDController = backRightTurn.getPIDController();
+  backRightPIDController = backLeftTurn.getPIDController();
+  
+  frontLeftPIDController.setFeedbackDevice(frontLeftEncoder);
+  frontRightPIDController.setFeedbackDevice(frontRightEncoder);
+  backLeftPIDController.setFeedbackDevice(backLeftEncoder);
+  backRightPIDController.setFeedbackDevice(backRightEncoder);
+
+  frontLeftEncoder.setPositionConversionFactor(ModuleConstants.TURN_ENCODER_POS_FACTOR);
+  frontRightEncoder.setPositionConversionFactor(ModuleConstants.TURN_ENCODER_POS_FACTOR);
+  backLeftEncoder.setPositionConversionFactor(ModuleConstants.TURN_ENCODER_POS_FACTOR);
+  backRightEncoder.setPositionConversionFactor(ModuleConstants.TURN_ENCODER_POS_FACTOR);
+  frontLeftEncoder.setVelocityConversionFactor(ModuleConstants.TURN_ENCODER_VELOCITY_FACTOR);
+  frontRightEncoder.setVelocityConversionFactor(ModuleConstants.TURN_ENCODER_VELOCITY_FACTOR);
+  backLeftEncoder.setVelocityConversionFactor(ModuleConstants.TURN_ENCODER_VELOCITY_FACTOR);
+  backRightEncoder.setVelocityConversionFactor(ModuleConstants.TURN_ENCODER_VELOCITY_FACTOR);
+
+  frontLeftEncoder.setInverted(ModuleConstants.invertTurnEncoder);
+  frontRightEncoder.setInverted(ModuleConstants.invertTurnEncoder);
+  backLeftEncoder.setInverted(ModuleConstants.invertTurnEncoder);
+  backRightEncoder.setInverted(ModuleConstants.invertTurnEncoder);
+  
+  frontLeftPIDController.setPositionPIDWrappingEnabled(true);
+  frontRightPIDController.setPositionPIDWrappingEnabled(true);
+  backLeftPIDController.setPositionPIDWrappingEnabled(true);
+  backRightPIDController.setPositionPIDWrappingEnabled(true);
+  frontLeftPIDController.setPositionPIDWrappingMaxInput(ModuleConstants.TURN_ENCODER_POS_MAX_INPUT);
+  frontRightPIDController.setPositionPIDWrappingMaxInput(ModuleConstants.TURN_ENCODER_POS_MAX_INPUT);
+  backLeftPIDController.setPositionPIDWrappingMaxInput(ModuleConstants.TURN_ENCODER_POS_MAX_INPUT);
+  backRightPIDController.setPositionPIDWrappingMaxInput(ModuleConstants.TURN_ENCODER_POS_MAX_INPUT);
+  frontLeftPIDController.setPositionPIDWrappingMinInput(ModuleConstants.TURN_ENCODER_POS_MIN_INPUT);
+  frontRightPIDController.setPositionPIDWrappingMinInput(ModuleConstants.TURN_ENCODER_POS_MIN_INPUT);
+  backLeftPIDController.setPositionPIDWrappingMinInput(ModuleConstants.TURN_ENCODER_POS_MIN_INPUT);
+  backRightPIDController.setPositionPIDWrappingMinInput(ModuleConstants.TURN_ENCODER_POS_MIN_INPUT);
+  
+  //set drive motor PID values
+  
+
+  //Set turn motor PID values 
+  frontLeftPIDController.setP(ModuleConstants.TURN_P);
+  frontRightPIDController.setP(ModuleConstants.TURN_P);
+  backLeftPIDController.setP(ModuleConstants.TURN_P);
+  backRightPIDController.setP(ModuleConstants.TURN_P);
+  frontLeftPIDController.setI(ModuleConstants.TURN_I);
+  frontRightPIDController.setI(ModuleConstants.TURN_I);
+  backLeftPIDController.setI(ModuleConstants.TURN_I);
+  backRightPIDController.setI(ModuleConstants.TURN_I);
+  frontLeftPIDController.setD(ModuleConstants.TURN_D);
+  frontRightPIDController.setD(ModuleConstants.TURN_D);
+  backLeftPIDController.setD(ModuleConstants.TURN_D);
+  backRightPIDController.setD(ModuleConstants.TURN_D);
+  frontLeftPIDController.setFF(ModuleConstants.TURN_FF);
+  frontRightPIDController.setFF(ModuleConstants.TURN_FF);
+  backLeftPIDController.setFF(ModuleConstants.TURN_FF);
+  backRightPIDController.setFF(ModuleConstants.TURN_FF);
+  frontLeftPIDController.setOutputRange(ModuleConstants.TURN_MIN_OUTPUT, ModuleConstants.TURN_MAX_OUTPUT);
+  frontRightPIDController.setOutputRange(ModuleConstants.TURN_MIN_OUTPUT, ModuleConstants.TURN_MAX_OUTPUT);
+  backLeftPIDController.setOutputRange(ModuleConstants.TURN_MIN_OUTPUT, ModuleConstants.TURN_MAX_OUTPUT);
+  backRightPIDController.setOutputRange(ModuleConstants.TURN_MIN_OUTPUT, ModuleConstants.TURN_MAX_OUTPUT);
+  
+  frontLeftTurn.setIdleMode(ModuleConstants.TURN_MOTOR_IDLE_MODE); 
+  frontRightTurn.setIdleMode(ModuleConstants.TURN_MOTOR_IDLE_MODE); 
+  backRightTurn.setIdleMode(ModuleConstants.TURN_MOTOR_IDLE_MODE); 
+  backLeftTurn.setIdleMode(ModuleConstants.TURN_MOTOR_IDLE_MODE); 
+  //driveSparkFlex.setSmartCurrentLimit(ModuleConstants.DRIVE_MOTOR_CURRENT_LIMIT);
+  frontLeftTurn.setSmartCurrentLimit(ModuleConstants.TURN_MOTOR_CURRENT_LIMIT);
+  frontRightTurn.setSmartCurrentLimit(ModuleConstants.TURN_MOTOR_CURRENT_LIMIT);
+  backRightTurn.setSmartCurrentLimit(ModuleConstants.TURN_MOTOR_CURRENT_LIMIT);
+  backLeftTurn.setSmartCurrentLimit(ModuleConstants.TURN_MOTOR_CURRENT_LIMIT);
+
+  //saves configs of modules in case of brownout
+  //driveSparkFlex.burnFlash();
+  frontLeftTurn.burnFlash();
+  frontRightTurn.burnFlash();
+  backRightTurn.burnFlash();
+  backLeftTurn.burnFlash();
 
     //kS = 0.13
     //kV = 0.583 // poss 1.71
@@ -215,6 +318,12 @@ public class KrakenSubsystem extends SubsystemBase {
     frontRightKraken.setVoltage(voltage);
     backRightKraken.setVoltage(voltage);
     backLeftKraken.setVoltage(voltage);
+
+    frontLeftPIDController.setReference(-Math.PI/2, ControlType.kPosition);
+    frontRightPIDController.setReference(0, ControlType.kPosition);
+    backLeftPIDController.setReference(Math.PI/2, ControlType.kPosition);
+    backRightPIDController.setReference(Math.PI, ControlType.kPosition);
+
   }
 
   public void setSpeed(double speed)
@@ -262,4 +371,3 @@ public class KrakenSubsystem extends SubsystemBase {
     return m_sysIdRoutine.dynamic(direction);
   }
 }
-

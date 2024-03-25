@@ -115,11 +115,8 @@ public class DriveTrain extends SubsystemBase {
     odometry.update(gyro.getRotation2d(), getPositions());
       // updates field
     field.setRobotPose(getPose());
-    SmartDashboard.putNumber("Heading", getHeading());
     SmartDashboard.putNumber("wheel speed", frontLeftModule.getWheelVelocity());
-    SmartDashboard.putNumber("wheel rotations", frontLeftModule.getRotations());
     SmartDashboard.putNumber("desired wheel speed", frontLeftModule.getDesiredVelocity());
-    SmartDashboard.putNumber("get pose heading", getPose().getRotation().getDegrees());
   }
 
   // general getter/setter methods BELOW

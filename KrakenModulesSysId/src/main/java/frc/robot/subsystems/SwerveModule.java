@@ -4,8 +4,6 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.VelocityDutyCycle;
@@ -19,6 +17,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkAbsoluteEncoder.Type;
 import com.revrobotics.SparkPIDController;
+import com.revrobotics.CANSparkBase.ControlType;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -32,7 +31,7 @@ import frc.robot.Constants.ModuleConstants;
 public class SwerveModule {
   private final CANSparkMax turningSparkMax;
   private final TalonFX driveKraken;
-  private SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(0.14382, 2.4001, 0.39733);
+  private SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(0.26531, 9.9458, 0.33184);
   //private final CANSparkFlex driveSparkFlex;
  
   //private final RelativeEncoder driveEncoder;
@@ -67,7 +66,7 @@ public SwerveModule(int driveID, int turningID, double chassisAngularOffset) {
   slot0Configs.kD = ModuleConstants.DRIVE_D;
   driveKraken.getConfigurator().apply(slot0Configs);*/
   TalonFXConfiguration config = new TalonFXConfiguration();
-    config.Feedback.SensorToMechanismRatio = 5.08/(0.076*Math.PI);
+    config.Feedback.SensorToMechanismRatio = 5.08/(0.076*3.14);
     config.Slot0.kP = 0.05;
     config.Slot0.kI = 0.0;
     config.Slot0.kD = 0.0;
@@ -126,15 +125,23 @@ public SwerveModule(int driveID, int turningID, double chassisAngularOffset) {
 
 //returns the current state of the module
 public SwerveModuleState getState(){
-  return new SwerveModuleState(driveKraken.getVelocity().getValue(), 
+  return new SwerveModuleState(driveKraken.getVelocity().getValue() * ModuleConstants.WHEEL_CIRCUMFRENCE_METERS, 
         new Rotation2d(turningEncoder.getPosition() - chassisAngularOffset));
 }
 
 //returns current position of the module 
 public SwerveModulePosition getPosition(){
   return new SwerveModulePosition(
-    driveKraken.getPosition().getValue(),
+    driveKraken.getPosition().getValue() * ModuleConstants.WHEEL_CIRCUMFRENCE_METERS,
     new Rotation2d(turningEncoder.getPosition() - chassisAngularOffset));
+}
+
+
+
+public void driveVoltageStraight(double voltage)
+{
+  driveKraken.setVoltage(voltage);
+  turningPIDController.setReference(0, ControlType.kPosition);
 }
 
 //sets desired state for module 

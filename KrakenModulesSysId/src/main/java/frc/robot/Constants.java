@@ -23,6 +23,9 @@ import edu.wpi.first.math.util.Units;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+  public static class OperatorConstants {
+    public static final int kDriverControllerPort = 0;
+  }
   // Controllers
   public static class OIConstants {
     public static final int driverControllerPort = 0;
@@ -40,7 +43,7 @@ public final class Constants {
   public static final class DriveConstants {
 
     // Drive parameters
-    public static final double maxSpeedMPS = 5;
+    public static final double maxSpeedMPS = 6.5;
     public static final double maxAngularSpeed = 3 * Math.PI; // Radians per sec
     public static final double slowDriveScalingConstant = .5; // Constant drive speed is multiplied by during slow drive
 
